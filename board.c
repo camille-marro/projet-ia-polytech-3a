@@ -24,22 +24,37 @@ Item *initGame()
   return node;
 }
 
-Item *initGameKnight()
-{
-  int i;
-  Item *node;
+//Item *initGameKnight()
+//{
+//  int i;
+//  Item *node;
+//
+//	char *initial = (char*)malloc(MAX_BOARD*sizeof(char));
+//	for (int i=0; i<MAX_BOARD; i++) initial[i] = 0;
+//  initial[0] = 2;
+//
+//  node = nodeAlloc();
+//  node->blank = 0;
+//	initBoard(node, initial);
+//
+//  node->depth = 0;
+//
+//  return node;
+//}
 
-	char *initial = (char*)malloc(MAX_BOARD*sizeof(char));
-	for (int i=0; i<MAX_BOARD; i++) initial[i] = 0;
-  initial[0] = 2;
-
-  node = nodeAlloc();
-  node->blank = 0;
+Item* InitGamePui(){
+    int i;
+    Item* node;
+    char* initial = (char*)malloc( MAX_BOARD * sizeof(char));
+    for (int i=0; i<MAX_BOARD; i++) initial[i] = 0;
+    node = nodeAlloc();
+    node->blank = 0;
 	initBoard(node, initial);
 
-  node->depth = 0;
+    node->depth = 0;
 
-  return node;
+    return node;
+
 }
 
 // print a board
@@ -86,13 +101,13 @@ double evaluateBoard(Item *node) {
 }
 
 // Return 0 if knight is on the last case, return 1 else
-double evaluateBoardKnight(Item *node) {
-  if (node == NULL) return 1;
-  if(node->board[MAX_BOARD-1] == 2) {
-    return 0;
-  }
-  return 1;
-}
+//double evaluateBoardKnight(Item *node) {
+//  if (node == NULL) return 1;
+//  if(node->board[MAX_BOARD-1] == 2) {
+//    return 0;
+//  }
+//  return 1;
+//}
 
 
 /*
@@ -100,22 +115,24 @@ double evaluateBoardKnight(Item *node) {
   pos : la position du possible prochain mouv
   return 1 si la pos est valide 0 sinon
 */
-int isValidPositionKnight (Item *node, int pos){
-  if (node == NULL) return 0;
-  int ii = pos / WH_BOARD;
-  int jj = pos % WH_BOARD;
 
-  for (int i = 0; i < WH_BOARD; i++) {
-    for (int j = 0; j < WH_BOARD; j++) {
-      if (node->board[i*WH_BOARD + j] == 2) {
-        if (abs(i - ii) * abs (j - jj) == 2 ) return 1;
-      }
-    }
-  }
-  return 0;
-}
+//int isValidPositionKnight (Item *node, int pos){
+//  if (node == NULL) return 0;
+//  int ii = pos / WH_BOARD;
+//  int jj = pos % WH_BOARD;
+//
+//  for (int i = 0; i < WH_BOARD; i++) {
+//    for (int j = 0; j < WH_BOARD; j++) {
+//      if (node->board[i*WH_BOARD + j] == 2) {
+//        if (abs(i - ii) * abs (j - jj) == 2 ) return 1;
+//      }
+//    }
+//  }
+//  return 0;
+//}
 // Test if position pos is valid with respect to node's state
 // nQueens -> not same row ; not same column ; not same diagonal
+
 int isValidPosition( Item *node, int pos )
 {
 	int ii = pos / WH_BOARD;
@@ -134,41 +151,41 @@ int isValidPosition( Item *node, int pos )
   return 1;
 }
 
-Item *getChildBoardKnightUCS(Item *node, int pos) {
-  Item *newNode = NULL;
-  if (isValidPositionKnight(node, pos)) {
-    newNode = nodeAlloc();
-    initBoard(newNode, node->board);
-    newNode->depth += 1;
-    newNode->f = node->f + 1;
+//Item *getChildBoardKnightUCS(Item *node, int pos) {
+//  Item *newNode = NULL;
+//  if (isValidPositionKnight(node, pos)) {
+//    newNode = nodeAlloc();
+//    initBoard(newNode, node->board);
+//    newNode->depth += 1;
+//    newNode->f = node->f + 1;
+//
+//    newNode->board[pos] = 2;
+//    newNode->board[node->blank] = 1;
+//
+//    newNode->blank = pos;
+//
+//    newNode->parent = node;
+//  }
+//  return newNode;
+//
+//}
 
-    newNode->board[pos] = 2;
-    newNode->board[node->blank] = 1;
-
-    newNode->blank = pos;
-
-    newNode->parent = node;
-  }
-  return newNode;
-
-}
-
-Item *getChildBoardKnight(Item *node, int pos) {
-  Item *newNode = NULL;
-  if (isValidPositionKnight(node, pos)) {
-    newNode = nodeAlloc();
-    initBoard(newNode, node->board);
-    newNode->depth += 1;
-
-    newNode->board[pos] = 2;
-    newNode->board[node->blank] = 1;
-
-    newNode->blank = pos;
-
-    newNode->parent = node;
-  }
-  return newNode;
-}
+//Item *getChildBoardKnight(Item *node, int pos) {
+//  Item *newNode = NULL;
+//  if (isValidPositionKnight(node, pos)) {
+//    newNode = nodeAlloc();
+//    initBoard(newNode, node->board);
+//    newNode->depth += 1;
+//
+//    newNode->board[pos] = 2;
+//    newNode->board[node->blank] = 1;
+//
+//    newNode->blank = pos;
+//
+//    newNode->parent = node;
+//  }
+//  return newNode;
+//}
 
 // Return a new item where a new queen is added at position pos if possible. NULL if not valid
 Item *getChildBoard( Item *node, int pos )
