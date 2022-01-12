@@ -48,8 +48,13 @@ void parcours(void) {
                 }
             }
             else{ //Si le joueur est humain :
-                printBoard(cur_node->board);
-                printf("Joueur %d, choisissez un coup entre 0 et %d", joueur, WH_BOARD-1);
+                printBoard(cur_node);
+                int choix=-1;
+                while(choix<0 || choix>WH_BOARD-1){
+                    printf("Joueur %d, choisissez un coup entre 0 et %d\n", joueur, WH_BOARD-1);
+                    scanf("%d",&choix);
+                }
+
             }
         }
     }
