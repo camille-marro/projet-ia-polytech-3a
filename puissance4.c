@@ -48,18 +48,7 @@ void parcours(void) {
     }
 }
 
-int CasePlusBasse(Item* node, int j) //Renvoie la case libre la plus basse de la colonne j
-{
 
-    for(int i = HE_BOARD-1;i>0;i--)
-    {
-        if(node->board[i*WH_BOARD + j]==0)
-        {
-            return i*WH_BOARD + j;
-        }
-    }
-    return -1; //Cas où la colonne j est complètement remplie
-}
 
 
 int main()

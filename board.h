@@ -27,3 +27,5 @@ Item *getChildBoardKnightUCS( Item *node, int pos );
 double evaluateBoardKnight( Item *node );
 
 void printBoard( Item *board );
+
+int CasePlusBasse(Item* node, int i);

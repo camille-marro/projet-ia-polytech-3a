@@ -138,17 +138,22 @@ int isValidPosition( Item *node, int pos )
 	int ii = pos / WH_BOARD;
 	int jj = pos % WH_BOARD;
 
-  for (int i=0; i<WH_BOARD; i++) {
-  	for (int j=0; j<WH_BOARD; j++) {
-      if (node->board[i*WH_BOARD + j] == 1) {
-        if (i == ii) return 0;
-        else if (j == jj) return 0;
-        else if ((i-j) == (ii-jj)) return 0;
-        else if ((i+j) == (ii+jj)) return 0;
+    if()
+
+    return 1;
+}
+
+int CasePlusBasse(Item* node, int j) //Renvoie la case libre la plus basse de la colonne j
+{
+
+    for(int i = HE_BOARD-1;i>0;i--)
+    {
+        if(node->board[i*WH_BOARD + j]==0)
+        {
+            return i*WH_BOARD + j;
         }
     }
-  }
-  return 1;
+    return -1; //Cas où la colonne j est complètement remplie
 }
 
 //Item *getChildBoardKnightUCS(Item *node, int pos) {
