@@ -35,15 +35,21 @@ void parcours(void) {
             showSolution(cur_node);
             return;
         } else {
-            for (int i = 0; i < MAX_BOARD; i++) {
-                // recup le prochain possible cout
-                // dans notre cas 7 possibilités ou moins
-                //
-                child_p = getChildBoard(cur_node, i, joueur); // le prochain possible cout
+            if(0) { //Si le joueur est une IA
+                for (int i = 0; i < MAX_BOARD; i++) {
+                    // recup le prochain possible cout
+                    // dans notre cas 7 possibilités ou moins
+                    //
+                    child_p = getChildBoard(cur_node, i, joueur); // le prochain possible cout
 
-                if (child_p != NULL) {
+                    if (child_p != NULL) {
 
+                    }
                 }
+            }
+            else{ //Si le joueur est humain :
+                printBoard(cur_node->board);
+                printf("Joueur %d, choisissez un coup entre 0 et %d", joueur, WH_BOARD-1);
             }
         }
     }
