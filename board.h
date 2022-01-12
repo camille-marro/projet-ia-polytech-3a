@@ -14,7 +14,7 @@ Item *initGame();
 
 void initBoard(Item *node, char *board);
 
-Item *getChildBoard( Item *node, int pos );
+Item *getChildBoard( Item *node, int pos, int joueur);
 
 double evaluateBoard( Item *node );
 

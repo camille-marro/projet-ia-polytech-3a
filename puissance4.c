@@ -6,6 +6,7 @@
 
 list_t openList_p;
 list_t closedList_p;
+int joueur=1;
 
 void showSolution( Item *goal )
 {
@@ -38,7 +39,7 @@ void parcours(void) {
                 // recup le prochain possible cout
                 // dans notre cas 7 possibilités ou moins
                 //
-                child_p = getChildBoard(cur_node, i); // le prochain possible cout
+                child_p = getChildBoard(cur_node, i, joueur); // le prochain possible cout
 
                 if (child_p != NULL) {
 
