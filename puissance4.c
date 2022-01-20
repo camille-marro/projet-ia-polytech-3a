@@ -28,8 +28,8 @@ void showSolution( Item *goal )
 void parcours(void) {
     Item *cur_node, *child_p;
     int choix, pos;
-    while (listCount(&openList_p)) { // tant que y'a des trucs dans open list
-        cur_node = popFirst(&openList_p);
+    while (listCount(&openList_p)) { // Ce while n'est plus valable si on met un joueur humain (seule l'IA se sert de OpenList)
+        //cur_node = popFirst(&openList_p); A déplacer vers la section IA
 
         addLast(&closedList_p, cur_node);
         if (evaluateBoard(cur_node) == 1.0) {
@@ -57,6 +57,8 @@ void parcours(void) {
                 }
                 pos = CasePlusBasse(cur_node, choix) * WH_BOARD + choix;
                 cur_node = getChildBoard(cur_node, pos, joueur);
+                if(joueur==1) joueur=2;
+                else joueur=1; //On change de joueur pour la prochaine itération
             }
         }
     }
