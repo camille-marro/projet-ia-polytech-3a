@@ -146,7 +146,7 @@ int isValidPosition( Item *node, int pos )
 
 int CasePlusBasse(Item* node, int j) //Renvoie la case libre la plus basse de la colonne j
 {
-
+    if(j<0 || j>WH_BOARD) return -1; //Si j est incorrect, renvoie -1
     for(int i = HE_BOARD-1;i>0;i--)
     {
         if(node->board[i*WH_BOARD + j]==0)
@@ -156,42 +156,6 @@ int CasePlusBasse(Item* node, int j) //Renvoie la case libre la plus basse de la
     }
     return -1; //Cas où la colonne j est complètement remplie
 }
-
-//Item *getChildBoardKnightUCS(Item *node, int pos) {
-//  Item *newNode = NULL;
-//  if (isValidPositionKnight(node, pos)) {
-//    newNode = nodeAlloc();
-//    initBoard(newNode, node->board);
-//    newNode->depth += 1;
-//    newNode->f = node->f + 1;
-//
-//    newNode->board[pos] = 2;
-//    newNode->board[node->blank] = 1;
-//
-//    newNode->blank = pos;
-//
-//    newNode->parent = node;
-//  }
-//  return newNode;
-//
-//}
-
-//Item *getChildBoardKnight(Item *node, int pos) {
-//  Item *newNode = NULL;
-//  if (isValidPositionKnight(node, pos)) {
-//    newNode = nodeAlloc();
-//    initBoard(newNode, node->board);
-//    newNode->depth += 1;
-//
-//    newNode->board[pos] = 2;
-//    newNode->board[node->blank] = 1;
-//
-//    newNode->blank = pos;
-//
-//    newNode->parent = node;
-//  }
-//  return newNode;
-//}
 
 // Return a new item where a new queen is added at position pos if possible. NULL if not valid
 Item *getChildBoard( Item *node, int pos, int joueur)
@@ -206,7 +170,7 @@ Item *getChildBoard( Item *node, int pos, int joueur)
         newNode->depth += 1;
 
         /* Make move */
-        newNode->board[pos] = 1;
+        newNode->board[pos] = joueur;
 
         /* link child to parent for backtrack */
         newNode->parent = node;

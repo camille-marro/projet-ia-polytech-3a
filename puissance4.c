@@ -27,6 +27,7 @@ void showSolution( Item *goal )
 
 void parcours(void) {
     Item *cur_node, *child_p;
+    int choix, pos;
     while (listCount(&openList_p)) { // tant que y'a des trucs dans open list
         cur_node = popFirst(&openList_p);
 
@@ -49,17 +50,17 @@ void parcours(void) {
             }
             else{ //Si le joueur est humain :
                 printBoard(cur_node);
-                int choix=-1;
-                while(choix<0 || choix>WH_BOARD-1){
+                choix=-1;
+                while(CasePlusBasse(cur_node, choix) == -1){ //CasePlusBasse revoie -1 si la colonne n'existe pas (hors limites) ou si la colonne est remplie
                     printf("Joueur %d, choisissez un coup entre 0 et %d\n", joueur, WH_BOARD-1);
                     scanf("%d",&choix);
                 }
-
+                pos = CasePlusBasse(cur_node, choix) * WH_BOARD + choix;
+                cur_node = getChildBoard(cur_node, pos, joueur);
             }
         }
     }
 }
-
 
 
 

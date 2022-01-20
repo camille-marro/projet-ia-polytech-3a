@@ -28,4 +28,6 @@ double evaluateBoardKnight( Item *node );
 
 void printBoard( Item *board );
 
+int isValidPosition( Item *node, int pos );
+
 int CasePlusBasse(Item* node, int i);
