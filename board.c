@@ -76,23 +76,93 @@ void initBoard(Item *node, char *board) {
 
 // Return 0 if all queens are placed. Positive otherwise
 // Ie: nb queens that still need to be placed.
-double evaluateBoard(Item *node) { //Regarde si autour du dernier coup, il y a des alignements
-    int nb = WH_BOARD;
-    for (int i = 0; i < MAX_BOARD; i++) {
-        if (node->board[i] == 1) nb -= 1;
+double evaluateBoard(Item* node, int dercoup) { //Regarde si autour du dernier coup, il y a des alignements
+    if(dercoup==-1){
+        printf("Pas de dernier coup\n");
+        return 0;
     }
-    return nb;
+    int derjoueur = node->board[dercoup]; //Récupère le numéro du joueur
+    int ii=dercoup/WH_BOARD;
+    int jj=dercoup % WH_BOARD;
+    if( ligne(node->board, derjoueur, ii, jj)) return derjoueur;
+    else if (colonne(node->board, derjoueur, ii, jj)) return derjoueur;
+    else if(diagonale(node->board, derjoueur, ii, jj)) return derjoueur;
+    else if(antidiagonale(node->board, derjoueur, ii, jj)) return derjoueur;
+    else return 0;
 }
 
-// Return 0 if knight is on the last case, return 1 else
-//double evaluateBoardKnight(Item *node) {
-//  if (node == NULL) return 1;
-//  if(node->board[MAX_BOARD-1] == 2) {
-//    return 0;
-//  }
-//  return 1;
-//}
+int ligne(char* board, int joueur, int ii, int jj){ //Regarde si pour un joueur donné, il y a 4 pions collés comprenant le dernier posé
+    int nb=1; //Le "premier" pion est le dernier posé
+    int j=jj-1;
+    //Vérifier des deux côtés du dernier pion posé est nécessaire car on peut compléter une chaîne de 4 en posant un pion au milieu
+    while(j>=0 && board[ii*WH_BOARD+j]==joueur){ //Vérification à gauche
+        nb+=1;
+        j-=1;
+    }
+    j=jj+1;
+    while(j<WH_BOARD && board[ii*WH_BOARD+j]==joueur){ //Vérif à droite
+        nb+=1;
+        j+=1;
+    }
+    if(nb>=4) return 1;
+    else return 0;
+}
 
+int colonne(char* board, int joueur, int ii, int jj){
+    int nb=1;
+    int i=ii-1;
+    while(i>=0 && board[i*WH_BOARD+jj]==joueur){
+        nb+=1;
+        i-=1;
+    }
+    i=ii+1;
+    while(i<HE_BOARD && board[i*WH_BOARD+jj]==joueur){ //Techniquement la vérification vers le haut ne sert à rien, mais je la mets pour le principe
+        nb+=1;
+        i+=1;
+    }
+    if(nb>=4) return 1;
+    else return 0;
+}
+
+int diagonale(char* board, int joueur, int ii, int jj){ //Axe haut gauche - bas droit
+    int nb=1;
+    int i=ii-1;
+    int j=jj-1;
+    while(i>=0 && j>=0 && board[i*WH_BOARD+j]==joueur){ //Haut gauche
+        nb+=1;
+        i-=1;
+        j-=1;
+    }
+    i=ii+1;
+    j=jj+1;
+    while(i<HE_BOARD && j<WH_BOARD && board[i*WH_BOARD+j]==joueur){ //Bas droit
+        nb+=1;
+        i+=1;
+        j+=1;
+    }
+    if(nb>=4) return 1;
+    else return 0;
+}
+
+int antidiagonale(char* board, int joueur, int ii, int jj){ //Axe bas gauche - haut droit
+    int nb=1;
+    int i=ii+1;
+    int j=jj-1;
+    while(i<HE_BOARD && j>=0 && board[i*WH_BOARD+j]==joueur){ //Bas gauche
+        nb+=1;
+        i+=1;
+        j-=1;
+    }
+    i=ii-1;
+    j=jj+1;
+    while(i>=0 && j<WH_BOARD && board[i*WH_BOARD+j]==joueur){ //Haut droit
+        nb+=1;
+        i-=1;
+        j+=1;
+    }
+    if(nb>=4) return 1;
+    else return 0;
+}
 
 /*
   node : pour recup le board
@@ -145,7 +215,6 @@ Item *getChildBoard( Item *node, int pos, int joueur)
     Item *newNode = NULL;
 
     if ( /*isValidPosition(node, pos)*/ 1 ) {
-        printf("là");
 
         /* allocate and init child node */
         newNode = nodeAlloc();

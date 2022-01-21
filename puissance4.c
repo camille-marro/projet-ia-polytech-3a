@@ -27,16 +27,24 @@ void showSolution( Item *goal )
 
 void parcours(void) {
     Item *cur_node, *child_p;
-    int choix, pos;
+    int choix, pos=-1, resultat; //L'initialisation de pos sert à bloquer la première évaluation de la board
     cur_node = popFirst(&openList_p); // A déplacer vers la section IA ? Sert ici à récupérer initial_state dans cur_node.
     while (1) { // Ce while n'est plus valable si on met un joueur humain (seule l'IA se sert de OpenList)
 
 
         //addLast(&closedList_p, cur_node);
-        if (evaluateBoard(cur_node) == 1.0) {
-            showSolution(cur_node);
+        resultat = evaluateBoard(cur_node, pos);
+        if (resultat == 1) {
+            printf("Le joueur 1 a gagné\n");
+            printBoard(cur_node);
             return;
-        } else {
+        }
+        else if (resultat == 2){
+            printf("Le joueur 2 a gagné\n");
+            printBoard(cur_node);
+            return;
+        }
+        else {
             if(0) { //Si le joueur est une IA
                 for (int i = 0; i < MAX_BOARD; i++) {
                     // recup le prochain possible cout
@@ -57,7 +65,6 @@ void parcours(void) {
                     scanf("%d",&choix);
                 }
                 pos = CasePlusBasse(cur_node, choix);
-                printf("%d\n",pos);
                 cur_node = getChildBoard(cur_node, pos, joueur);
                 if(joueur==1) joueur=2;
                 else joueur=1; //On change de joueur pour la prochaine itération

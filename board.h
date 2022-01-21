@@ -18,7 +18,15 @@ void initBoard(Item *node, char *board);
 
 Item *getChildBoard( Item *node, int pos, int joueur);
 
-double evaluateBoard( Item *node );
+double evaluateBoard( Item *node, int dercoup);
+
+int ligne(char* board, int joueur, int ii, int jj);
+
+int colonne(char* board, int joueur, int ii, int jj);
+
+int diagonale(char* board, int joueur, int ii, int jj);
+
+int antidiagonale(char* board, int joueur, int ii, int jj);
 
 Item *initGameKnight();
 
