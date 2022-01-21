@@ -28,10 +28,11 @@ void showSolution( Item *goal )
 void parcours(void) {
     Item *cur_node, *child_p;
     int choix, pos;
-    while (listCount(&openList_p)) { // Ce while n'est plus valable si on met un joueur humain (seule l'IA se sert de OpenList)
-        //cur_node = popFirst(&openList_p); A déplacer vers la section IA
+    cur_node = popFirst(&openList_p); // A déplacer vers la section IA ? Sert ici à récupérer initial_state dans cur_node.
+    while (1) { // Ce while n'est plus valable si on met un joueur humain (seule l'IA se sert de OpenList)
 
-        addLast(&closedList_p, cur_node);
+
+        //addLast(&closedList_p, cur_node);
         if (evaluateBoard(cur_node) == 1.0) {
             showSolution(cur_node);
             return;
@@ -55,7 +56,8 @@ void parcours(void) {
                     printf("Joueur %d, choisissez un coup entre 0 et %d\n", joueur, WH_BOARD-1);
                     scanf("%d",&choix);
                 }
-                pos = CasePlusBasse(cur_node, choix) * WH_BOARD + choix;
+                pos = CasePlusBasse(cur_node, choix);
+                printf("%d\n",pos);
                 cur_node = getChildBoard(cur_node, pos, joueur);
                 if(joueur==1) joueur=2;
                 else joueur=1; //On change de joueur pour la prochaine itération
@@ -74,7 +76,7 @@ int main()
 
 
     printf("\nInitial:");
-    Item *initial_state = initGame();
+    Item *initial_state = initGamePui();
     printBoard( initial_state );
 
     // printf("\nSearching ...\n");
@@ -84,7 +86,7 @@ int main()
 
     printf("\nSearching ...\n");
     addFirst (&openList_p, initial_state );
-    printf("J'adore les arbres morts\n");
+    parcours();
     printf("Finished!\n");
 
     /* clean lists */

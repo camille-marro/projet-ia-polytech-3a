@@ -25,25 +25,8 @@ Item *initGame()
     return node;
 }
 
-//Item *initGameKnight()
-//{
-//  int i;
-//  Item *node;
-//
-//	char *initial = (char*)malloc(MAX_BOARD*sizeof(char));
-//	for (int i=0; i<MAX_BOARD; i++) initial[i] = 0;
-//  initial[0] = 2;
-//
-//  node = nodeAlloc();
-//  node->blank = 0;
-//	initBoard(node, initial);
-//
-//  node->depth = 0;
-//
-//  return node;
-//}
 
-Item* InitGamePui(){
+Item* initGamePui(){
     int i;
     Item* node;
     char* initial = (char*)malloc( MAX_BOARD * sizeof(char));
@@ -93,7 +76,7 @@ void initBoard(Item *node, char *board) {
 
 // Return 0 if all queens are placed. Positive otherwise
 // Ie: nb queens that still need to be placed.
-double evaluateBoard(Item *node) {
+double evaluateBoard(Item *node) { //Regarde si autour du dernier coup, il y a des alignements
     int nb = WH_BOARD;
     for (int i = 0; i < MAX_BOARD; i++) {
         if (node->board[i] == 1) nb -= 1;
@@ -157,12 +140,12 @@ int CasePlusBasse(Item* node, int j) //Renvoie la case libre la plus basse de la
     return -1; //Cas où la colonne j est complètement remplie
 }
 
-// Return a new item where a new queen is added at position pos if possible. NULL if not valid
 Item *getChildBoard( Item *node, int pos, int joueur)
 {
     Item *newNode = NULL;
 
-    if ( isValidPosition(node, pos) ) {
+    if ( /*isValidPosition(node, pos)*/ 1 ) {
+        printf("là");
 
         /* allocate and init child node */
         newNode = nodeAlloc();

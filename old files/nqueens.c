@@ -12,7 +12,7 @@ list_t openList_p;
 list_t closedList_p;
 
 
-void showSolution( Item *goal )
+void showSolution( Item *goal ) Commenté pour éviter des conflits
 {
     int i = 0, j;
 
@@ -54,7 +54,7 @@ void bfs( void )
 
             /* Enumerate adjacent states */
             for (int i = 0; i < MAX_BOARD; i++) {
-                child_p = getChildBoard( cur_node, i );
+                //child_p = getChildBoard( cur_node, i); Commenté pour éviter des erreurs à la compilation
 
                 if (child_p != NULL) { // it's a valid child!
 
@@ -84,7 +84,7 @@ void dfs (void) {
         } else {
 
             for (int i = 0; i < MAX_BOARD; i++) {
-                child_p = getChildBoard( cur_node, i );
+                //child_p = getChildBoard( cur_node, i );
 
                 if (child_p != NULL) {
                     addLast( &openList_p, child_p );
