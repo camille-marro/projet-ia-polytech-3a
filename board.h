@@ -4,8 +4,9 @@
 #define RANDOM()  ((float)rand() / (float)RAND_MAX)
 #define RANDMAX(x)  (int)((float)(x)*rand()/(RAND_MAX+1.0))
 
-#define MAX_BOARD 36 //25
-#define WH_BOARD 6 //5
+#define MAX_BOARD 42 //25
+#define WH_BOARD 7 //5
+#define HE_BOARD 6
 
 
 
@@ -13,7 +14,7 @@ Item *initGame();
 
 void initBoard(Item *node, char *board);
 
-Item *getChildBoard( Item *node, int pos );
+Item *getChildBoard( Item *node, int pos, int joueur);
 
 double evaluateBoard( Item *node );
 
@@ -26,3 +27,5 @@ Item *getChildBoardKnightUCS( Item *node, int pos );
 double evaluateBoardKnight( Item *node );
 
 void printBoard( Item *board );
+
+int CasePlusBasse(Item* node, int i);
