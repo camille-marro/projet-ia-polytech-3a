@@ -9,6 +9,9 @@ typedef struct Item_s {
     char blank;
     float f, g, h; // cost, heuristic, ...
     int depth;
+    int score;
+    //int nbrefils;
+    int pos;
     struct Item_s *parent; // needed for tree structure in game search
     struct Item_s *prev, *next; // needed for chained list
 } Item;

@@ -84,10 +84,10 @@ double evaluateBoard(Item* node, int dercoup) { //Regarde si autour du dernier c
     int derjoueur = node->board[dercoup]; //Récupère le numéro du joueur
     int ii=dercoup/WH_BOARD;
     int jj=dercoup % WH_BOARD;
-    if( ligne(node->board, derjoueur, ii, jj)) return derjoueur;
-    else if (colonne(node->board, derjoueur, ii, jj)) return derjoueur;
-    else if(diagonale(node->board, derjoueur, ii, jj)) return derjoueur;
-    else if(antidiagonale(node->board, derjoueur, ii, jj)) return derjoueur;
+    if( ligne(node->board, derjoueur, ii, jj) == 4) return derjoueur;
+    else if (colonne(node->board, derjoueur, ii, jj) == 4) return derjoueur;
+    else if(diagonale(node->board, derjoueur, ii, jj) == 4) return derjoueur;
+    else if(antidiagonale(node->board, derjoueur, ii, jj) == 4) return derjoueur;
     else return 0;
 }
 
@@ -104,8 +104,7 @@ int ligne(char* board, int joueur, int ii, int jj){ //Regarde si pour un joueur 
         nb+=1;
         j+=1;
     }
-    if(nb>=4) return 1;
-    else return 0;
+    return nb;
 }
 
 int colonne(char* board, int joueur, int ii, int jj){
@@ -120,8 +119,7 @@ int colonne(char* board, int joueur, int ii, int jj){
         nb+=1;
         i+=1;
     }
-    if(nb>=4) return 1;
-    else return 0;
+    return nb;
 }
 
 int diagonale(char* board, int joueur, int ii, int jj){ //Axe haut gauche - bas droit
@@ -140,8 +138,7 @@ int diagonale(char* board, int joueur, int ii, int jj){ //Axe haut gauche - bas 
         i+=1;
         j+=1;
     }
-    if(nb>=4) return 1;
-    else return 0;
+    return nb;
 }
 
 int antidiagonale(char* board, int joueur, int ii, int jj){ //Axe bas gauche - haut droit
@@ -160,8 +157,7 @@ int antidiagonale(char* board, int joueur, int ii, int jj){ //Axe bas gauche - h
         i-=1;
         j+=1;
     }
-    if(nb>=4) return 1;
-    else return 0;
+    return nb;
 }
 
 /*
@@ -187,20 +183,22 @@ int antidiagonale(char* board, int joueur, int ii, int jj){ //Axe bas gauche - h
 // Test if position pos is valid with respect to node's state
 // nQueens -> not same row ; not same column ; not same diagonal
 
-int isValidPosition( Item *node, int pos )
+int isValidPosition( Item *node, int pos)
 {
     int ii = pos / WH_BOARD;
     int jj = pos % WH_BOARD;
-
-    if (CasePlusBasse(node, jj) == ii) {
+    if (CasePlusBasse(node, jj) == pos) {
         return 1;
     } else return 0;
 }
 
+//int CasePlusBasse()
+
 int CasePlusBasse(Item* node, int j) //Renvoie la case libre la plus basse de la colonne j
 {
+    int i;
     if(j<0 || j>WH_BOARD) return -1; //Si j est incorrect, renvoie -1
-    for(int i = HE_BOARD-1;i>0;i--)
+    for(i = HE_BOARD-1;i>=0;i--)
     {
         if(node->board[i*WH_BOARD + j]==0)
         {
@@ -212,22 +210,29 @@ int CasePlusBasse(Item* node, int j) //Renvoie la case libre la plus basse de la
 
 Item *getChildBoard( Item *node, int pos, int joueur)
 {
-    Item *newNode = NULL;
+    Item *newNode ;
 
-    if ( /*isValidPosition(node, pos)*/ 1 ) {
+    if (isValidPosition(node, pos)) {
 
         /* allocate and init child node */
         newNode = nodeAlloc();
         initBoard(newNode, node->board);
-        newNode->depth += 1;
+
+        newNode->depth = node->depth +1 ;
 
         /* Make move */
         newNode->board[pos] = joueur;
 
         /* link child to parent for backtrack */
         newNode->parent = node;
-    }
 
+        /*incrementer le nombre de fils*/
+        //node->nbrefils++;
+        newNode->pos = pos ; //La Position qu'on a joué
+
+        newNode->score = score(node, pos, joueur);
+        printf("Le score du noeud est %d\n",newNode->score);
+    }
     return newNode;
 }
 
@@ -238,3 +243,69 @@ void clrscr()
     system("@cls||clear");
 }
 /* ==============================================*/
+
+//Item *Generateur_Coup(Item *node, int joueur)
+//{
+//    int i;
+//    
+//    for ( i = 0; i < MAX_BOARD; i++)
+//    {
+//        getChildBoard(node, i, joueur);
+//    }
+//    return 
+//}
+//
+
+
+/* ==============================================*/
+int ConvertToScore(int nbrepion)
+{
+    switch (nbrepion)
+    {
+        case 1:
+            return 1;
+            break;
+        case 2:
+            return 5;
+            break;
+        case 3:
+            return 50;
+            break;
+        case 4:
+            return 1000;
+            break;
+    }
+    return 0;
+}
+
+/* ==============================================*/
+int score(Item *node, int dercoup, int joueur)
+{
+    int ii = dercoup / WH_BOARD;
+    int jj = dercoup % WH_BOARD;
+
+
+    return (ConvertToScore(ligne(node->board, joueur, ii, jj)) + ConvertToScore(colonne(node->board, joueur, ii, jj))
+            + ConvertToScore(diagonale(node->board, joueur, ii, jj)) + ConvertToScore(antidiagonale(node->board, joueur, ii, jj)));
+}
+
+/* ==============================================*/
+
+int min(int a, int b)
+{
+    if (a < b)
+    {
+        return a;
+    }
+    return b;
+}
+/* ==============================================*/
+
+int max(int a, int b)
+{
+    if (a > b)
+    {
+        return a;
+    }
+    return b;
+}

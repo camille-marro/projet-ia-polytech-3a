@@ -11,11 +11,11 @@ int joueur=1;
 void showSolution( Item *goal )
 {
     int i = 0, j;
-
+ 
     printf("\nSolution:");
 
     while (goal) {
-        printBoard( goal );
+        printBoard( goal ); 
         goal = goal->parent;
         i++;
     }
@@ -25,12 +25,51 @@ void showSolution( Item *goal )
     printf("Size of closed list = %d\n", closedList_p.numElements);
 }
 
+
+Item *minimax(Item *Node, int depth, int joueur)
+{
+    int i;
+    int value;
+    int pos;
+    Item *child = nodeAlloc();
+    if (depth == 0 || evaluateBoard(Node, Node->pos) == joueur)
+    {
+        printf("l'evaluation donne %f\n", evaluateBoard(Node, Node->pos));
+        return Node;
+    }
+    if (joueur == 2)
+    {
+        value = -10000;
+        for (i = 0; i < WH_BOARD; i++)
+        {
+            pos = CasePlusBasse(Node, i) ;
+            child = getChildBoard(Node,pos,joueur);
+            printBoard(child);
+            printf("pos is %d\n", pos);
+            value = max(value, minimax(child, depth-1, 1)->score);
+        } 
+    }
+    else
+    {
+        value = 10000;
+        for (i = 0; i < WH_BOARD; i++)
+        {
+            pos = CasePlusBasse(Node, i);
+            printf("pos is %d\n", pos);
+            child = getChildBoard(Node,pos,joueur);
+            printBoard(child);
+            value = min(value, minimax(child, depth-1, 2)->score);
+        }
+    }
+}
+
 void parcours(void) {
     Item *cur_node, *child_p;
     int choix, pos=-1, resultat; //L'initialisation de pos sert à bloquer la première évaluation de la board
     cur_node = popFirst(&openList_p); // A déplacer vers la section IA ? Sert ici à récupérer initial_state dans cur_node.
+    Item *temp = NULL;
+    int colonne = -1;
     while (1) { // Ce while n'est plus valable si on met un joueur humain (seule l'IA se sert de OpenList)
-
 
         //addLast(&closedList_p, cur_node);
         resultat = evaluateBoard(cur_node, pos);
@@ -45,20 +84,26 @@ void parcours(void) {
             return;
         }
         else {
-            if(0) { //Si le joueur est une IA
-                for (int i = 0; i < MAX_BOARD; i++) {
-                    // recup le prochain possible cout
-                    // dans notre cas 7 possibilités ou moins
-                    //
-                    child_p = getChildBoard(cur_node, i, joueur); // le prochain possible cout
-
-                    if (child_p != NULL) {
-
-                    }
-                }
+            if(joueur == 2) { //Si le joueur est une IA
+                //for (int i = 0; i < MAX_BOARD; i++) {
+                //    // recup le prochain possible cout
+                //    // dans notre cas 7 possibilités ou moins
+                //    //
+                //     = getChildBoard(cur_node, i, joueur); // le prochain possible cout
+//
+                //    if (child_p != NULL) {
+//
+                //    }
+                //}
+                printf("===================");
+                temp = minimax(cur_node, 7, joueur);
+                colonne = temp -> pos % WH_BOARD;
+                pos = CasePlusBasse(cur_node, colonne);
+                cur_node = getChildBoard(temp, pos, joueur);
+                clrscr();
+                joueur = 1;
             }
             else{ //Si le joueur est humain :
-                printBoard(cur_node);
     
                 choix=-1;
                 while(CasePlusBasse(cur_node, choix) == -1){ //CasePlusBasse revoie -1 si la colonne n'existe pas (hors limites) ou si la colonne est remplie
@@ -68,9 +113,9 @@ void parcours(void) {
                 pos = CasePlusBasse(cur_node, choix);
                 cur_node = getChildBoard(cur_node, pos, joueur);
                 clrscr();
-                if(joueur==1) joueur=2;
-                else joueur=1; //On change de joueur pour la prochaine itération
+                joueur = 2;
             }
+            printBoard(cur_node);
         }
     }
 }
@@ -91,10 +136,20 @@ int main()
     // addLast( &openList_p, initial_state );
     // bfs();
     // printf("Finished!\n");
+    //initial_state->pos = 35;
 
     printf("\nSearching ...\n");
     addFirst (&openList_p, initial_state );
-    parcours();
+    //parcours();
+    initial_state->board[35] = 1;
+    initial_state->board[36] = 1;
+    initial_state->board[37] = 1;
+    initial_state->board[38] = 2;
+    initial_state->board[39] = 2;
+    initial_state->board[32] = 2;
+    initial_state->board[25] = 2;
+    minimax(initial_state, 3, 2);
+    //printf("Le score du board est %d ",score(initial_state,35,1));
     printf("Finished!\n");
 
     /* clean lists */

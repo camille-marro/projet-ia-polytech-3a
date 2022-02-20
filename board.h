@@ -3,10 +3,10 @@
 #define RANDINIT()  srand(time(NULL))
 #define RANDOM()  ((float)rand() / (float)RAND_MAX)
 #define RANDMAX(x)  (int)((float)(x)*rand()/(RAND_MAX+1.0))
- 
-#define MAX_BOARD 42 //25
+
 #define WH_BOARD 7 //5
 #define HE_BOARD 6
+#define MAX_BOARD WH_BOARD*HE_BOARD //25
 
 
 
@@ -28,7 +28,7 @@ int diagonale(char* board, int joueur, int ii, int jj);
 
 int antidiagonale(char* board, int joueur, int ii, int jj);
 
-Item *initGameKnight();
+Item *initGameKnight(); 
 
 Item *getChildBoardKnight( Item *node, int pos );
 
@@ -43,3 +43,11 @@ int isValidPosition( Item *node, int pos );
 int CasePlusBasse(Item* node, int i);
 
 void clrscr();
+
+int ConvertToScore(int nbrepion);
+
+int score(Item *node, int dercoup, int joueur);
+
+int min(int a, int b);
+
+int max(int a, int b);
