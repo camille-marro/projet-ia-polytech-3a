@@ -26,12 +26,13 @@ void showSolution( Item *goal )
 }
 
 
-Item *minimax(Item *Node, int depth, int joueur)
+Item* minimax(Item *Node, int depth, int joueur)
 {
     int i;
-    int value;
+    int value, temp_val;
     int pos;
     Item *child = nodeAlloc();
+    Item* temp_child, *res;
     if (depth == 0 || evaluateBoard(Node, Node->pos) == joueur)
     {
         //printf("l'evaluation donne %f\n", evaluateBoard(Node, Node->pos));
@@ -46,10 +47,15 @@ Item *minimax(Item *Node, int depth, int joueur)
         {
             pos = CasePlusBasse(Node, i) ;
             child = getChildBoard(Node,pos,joueur);
-            printBoard(child);
-            printf("pos is %d\n", pos);
-            value = max(value, minimax(child, depth-1, 1)->score);
-            child->score= value;
+            //printBoard(child);
+            //printf("pos is %d\n", pos);
+            if(child!=NULL) {
+                temp_child = minimax(child, depth - 1, 1);
+                if (temp_child->score > value) {
+                    res = temp_child;
+                    value = temp_child->score;
+                }
+            }
         }
     }
     else
@@ -58,13 +64,19 @@ Item *minimax(Item *Node, int depth, int joueur)
         for (i = 0; i < WH_BOARD; i++)
         {
             pos = CasePlusBasse(Node, i);
-            printf("pos is %d\n", pos);
+            //printf("pos is %d\n", pos);
             child = getChildBoard(Node,pos,joueur);
-            printBoard(child);
-            value = min(value, minimax(child, depth-1, 2)->score);
-            child->score= value;
+            //printBoard(child);
+            if(child!=NULL) {
+                temp_child = minimax(child, depth - 1, 1);
+                if (temp_child->score < value) {
+                    res = temp_child;
+                    value = temp_child->score;
+                }
+            }
         }
     }
+    return res;
 }
 
 void parcours(void) {
@@ -100,11 +112,8 @@ void parcours(void) {
                 //    }
                 //}
                 printf("===================");
-                temp = minimax(cur_node, 7, joueur);
-                colonne = temp -> pos % WH_BOARD;
-                pos = CasePlusBasse(cur_node, colonne);
-                cur_node = getChildBoard(temp, pos, joueur);
-                clrscr();
+                cur_node = minimax(cur_node, 3, joueur);
+                //clrscr();
                 joueur = 1;
             }
             else{ //Si le joueur est humain :
@@ -116,9 +125,12 @@ void parcours(void) {
                 }
                 pos = CasePlusBasse(cur_node, choix);
                 cur_node = getChildBoard(cur_node, pos, joueur);
-                clrscr();
+                //clrscr();
                 joueur = 2;
             }
+            printf("la\n");
+            if(cur_node==NULL) printf("probleme");
+            printf("la\n");
             printBoard(cur_node);
         }
     }
@@ -144,9 +156,9 @@ int main()
 
     printf("\nSearching ...\n");
     addFirst (&openList_p, initial_state );
-    //parcours();
+    parcours();
     //initial_state->board[35] = 1;
-    minimax(initial_state, 3, 2);
+    //minimax(initial_state, 3, 2);
     //printf("Le score du board est %d ",score(initial_state,35,1));
     printf("Finished!\n");
 

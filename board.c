@@ -84,10 +84,10 @@ double evaluateBoard(Item* node, int dercoup) { //Regarde si autour du dernier c
     int derjoueur = node->board[dercoup]; //Récupère le numéro du joueur
     int ii=dercoup/WH_BOARD;
     int jj=dercoup % WH_BOARD;
-    if( ligne(node->board, derjoueur, ii, jj) == 4) return derjoueur;
-    else if (colonne(node->board, derjoueur, ii, jj) == 4) return derjoueur;
-    else if(diagonale(node->board, derjoueur, ii, jj) == 4) return derjoueur;
-    else if(antidiagonale(node->board, derjoueur, ii, jj) == 4) return derjoueur;
+    if( ligne(node->board, derjoueur, ii, jj) >= 4) return derjoueur;
+    else if (colonne(node->board, derjoueur, ii, jj) >= 4) return derjoueur;
+    else if(diagonale(node->board, derjoueur, ii, jj) >= 4) return derjoueur;
+    else if(antidiagonale(node->board, derjoueur, ii, jj) >= 4) return derjoueur;
     else return 0;
 }
 
