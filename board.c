@@ -230,8 +230,8 @@ Item *getChildBoard( Item *node, int pos, int joueur)
         //node->nbrefils++;
         newNode->pos = pos ; //La Position qu'on a joué
 
-        newNode->score = score(node, pos, joueur);
-        printf("Le score du noeud est %d\n",newNode->score);
+        //newNode->score = score(node, pos, joueur);
+        //printf("Le score du noeud est %d\n",newNode->score);
     }
     return newNode;
 }

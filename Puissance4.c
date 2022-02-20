@@ -34,7 +34,9 @@ Item *minimax(Item *Node, int depth, int joueur)
     Item *child = nodeAlloc();
     if (depth == 0 || evaluateBoard(Node, Node->pos) == joueur)
     {
-        printf("l'evaluation donne %f\n", evaluateBoard(Node, Node->pos));
+        //printf("l'evaluation donne %f\n", evaluateBoard(Node, Node->pos));
+        Node->score = score(Node, pos, joueur);
+        //printf("Le score du noeud est %d\n",Node->score);
         return Node;
     }
     if (joueur == 2)
@@ -47,7 +49,8 @@ Item *minimax(Item *Node, int depth, int joueur)
             printBoard(child);
             printf("pos is %d\n", pos);
             value = max(value, minimax(child, depth-1, 1)->score);
-        } 
+            child->score= value;
+        }
     }
     else
     {
@@ -59,6 +62,7 @@ Item *minimax(Item *Node, int depth, int joueur)
             child = getChildBoard(Node,pos,joueur);
             printBoard(child);
             value = min(value, minimax(child, depth-1, 2)->score);
+            child->score= value;
         }
     }
 }
@@ -141,13 +145,7 @@ int main()
     printf("\nSearching ...\n");
     addFirst (&openList_p, initial_state );
     //parcours();
-    initial_state->board[35] = 1;
-    initial_state->board[36] = 1;
-    initial_state->board[37] = 1;
-    initial_state->board[38] = 2;
-    initial_state->board[39] = 2;
-    initial_state->board[32] = 2;
-    initial_state->board[25] = 2;
+    //initial_state->board[35] = 1;
     minimax(initial_state, 3, 2);
     //printf("Le score du board est %d ",score(initial_state,35,1));
     printf("Finished!\n");
