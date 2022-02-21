@@ -35,10 +35,12 @@ int minimax(Item *Node, int depth, int joueur)
     if (depth == 0 || evaluateBoard(Node, Node->pos) == joueur)
     {
         //printf("l'evaluation donne %f\n", evaluateBoard(Node, Node->pos));
-        //Node->score = score(Node, pos, joueur);
+        pos=Node->pos;
+        Node->score = score(Node, pos, joueur);
         //printf("Le score du noeud est %d\n",Node->score);
-        return 0;
+        return Node->score;
     }
+    printBoard(Node);
     if (joueur == 2)
     {
         value = -10000;
@@ -53,6 +55,7 @@ int minimax(Item *Node, int depth, int joueur)
                 if (childscore > value) {
                     best_child = child; //inutile pour le moment (pas sûr que ça serve)
                     value = childscore;
+                    printf("Colonne %d : score %d\n", i, value);
                 }
             }
         }
@@ -71,6 +74,7 @@ int minimax(Item *Node, int depth, int joueur)
                 if (childscore < value) {
                     best_child = child;
                     value = childscore;
+                    printf("Colonne %d : score %d\n", i, value);
                 }
             }
         }
@@ -115,7 +119,7 @@ void parcours(void) {
                 //}
                 printf("===================");
                 value = -10000;
-                depth=2;
+                depth=3;
                 for (i = 0; i < WH_BOARD; i++)
                 {
                     pos = CasePlusBasse(cur_node, i) ;
@@ -146,9 +150,6 @@ void parcours(void) {
                 //clrscr();
                 joueur = 2;
             }
-            printf("la\n");
-            if(cur_node==NULL) printf("probleme");
-            printf("la\n");
             printBoard(cur_node);
         }
     }
