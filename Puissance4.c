@@ -26,19 +26,18 @@ void showSolution( Item *goal )
 }
 
 
-Item* minimax(Item *Node, int depth, int joueur)
+int minimax(Item *Node, int depth, int joueur)
 {
     int i;
-    int value, temp_val;
-    int pos;
+    int value, childscore, pos;
     Item *child = nodeAlloc();
-    Item* temp_child, *res;
+    Item* best_child;
     if (depth == 0 || evaluateBoard(Node, Node->pos) == joueur)
     {
         //printf("l'evaluation donne %f\n", evaluateBoard(Node, Node->pos));
-        Node->score = score(Node, pos, joueur);
+        //Node->score = score(Node, pos, joueur);
         //printf("Le score du noeud est %d\n",Node->score);
-        return Node;
+        return 0;
     }
     if (joueur == 2)
     {
@@ -50,10 +49,10 @@ Item* minimax(Item *Node, int depth, int joueur)
             //printBoard(child);
             //printf("pos is %d\n", pos);
             if(child!=NULL) {
-                temp_child = minimax(child, depth - 1, 1);
-                if (temp_child->score > value) {
-                    res = temp_child;
-                    value = temp_child->score;
+                childscore = minimax(child, depth - 1, 1);
+                if (childscore > value) {
+                    best_child = child; //inutile pour le moment (pas sûr que ça serve)
+                    value = childscore;
                 }
             }
         }
@@ -68,23 +67,26 @@ Item* minimax(Item *Node, int depth, int joueur)
             child = getChildBoard(Node,pos,joueur);
             //printBoard(child);
             if(child!=NULL) {
-                temp_child = minimax(child, depth - 1, 1);
-                if (temp_child->score < value) {
-                    res = temp_child;
-                    value = temp_child->score;
+                childscore = minimax(child, depth - 1, 2);
+                if (childscore < value) {
+                    best_child = child;
+                    value = childscore;
                 }
             }
         }
     }
-    return res;
+    Node->score=value;
+    return value;
 }
 
 void parcours(void) {
-    Item *cur_node, *child_p;
+    int i, depth;
+    Item *cur_node;
     int choix, pos=-1, resultat; //L'initialisation de pos sert à bloquer la première évaluation de la board
     cur_node = popFirst(&openList_p); // A déplacer vers la section IA ? Sert ici à récupérer initial_state dans cur_node.
-    Item *temp = NULL;
-    int colonne = -1;
+    int value, childscore;
+    Item *child;
+    Item* best_child;
     while (1) { // Ce while n'est plus valable si on met un joueur humain (seule l'IA se sert de OpenList)
 
         //addLast(&closedList_p, cur_node);
@@ -112,7 +114,23 @@ void parcours(void) {
                 //    }
                 //}
                 printf("===================");
-                cur_node = minimax(cur_node, 3, joueur);
+                value = -10000;
+                depth=2;
+                for (i = 0; i < WH_BOARD; i++)
+                {
+                    pos = CasePlusBasse(cur_node, i) ;
+                    child = getChildBoard(cur_node,pos,joueur);
+                    if(child!=NULL) {
+                        childscore = minimax(child, depth - 1, 1);
+                        if (childscore > value) {
+                            best_child = child;
+                            value = childscore;
+                        }
+                    }
+                }
+                cur_node->score = value;
+                cur_node = best_child; //On joue le coup
+                pos = cur_node->pos; //On rétablit pos qui sauvegarde le dernier coup joué (pour evaluateBoard)
                 //clrscr();
                 joueur = 1;
             }
