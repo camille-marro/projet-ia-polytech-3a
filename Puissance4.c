@@ -27,12 +27,16 @@ void showSolution( Item *goal )
 
 int minimax(Item *Node, int depth, int joueur) {
     int value;
-    if (depth == 0 || evaluateBoard(Node, Node->pos) != 0) return Node->score;
+    if (depth == 0 || evaluateBoard(Node, Node->pos) != 0) {
+        //printf(" --- 0 ---\n");
+        return Node->score;
+    }
     if (joueur == 2) {
         value = -100000;
         for (int i = 0; i < WH_BOARD; i++) {
             Node->score = minimax(getChildBoard(Node, CasePlusBasse(Node, i), 2), depth - 1, 1);
             value = max(value, Node->score);
+            //printf(" --- %d --- j%d, score : %d\n",depth, joueur, value);
         }
     }
     else {
@@ -40,6 +44,7 @@ int minimax(Item *Node, int depth, int joueur) {
         for (int i = 0; i < WH_BOARD; i++) {
             Node->score = minimax(getChildBoard(Node, CasePlusBasse(Node, i), 1), depth - 1, 2);
             value = min(value, Node->score);
+            //printf(" --- %d --- j%d, score : %d\n", depth, joueur, value);
         }
     }
     return value;
@@ -130,13 +135,13 @@ void parcours(void) {
         else {
             if(joueur == 2) { //Si le joueur est une IA
                 //for (int i = 0; i < MAX_BOARD; i++) {
-                //    // recup le prochain possible cout
+                //    //recup le prochain possible cout
                 //    // dans notre cas 7 possibilités ou moins
                 //    //
                 //     = getChildBoard(cur_node, i, joueur); // le prochain possible cout
-//
+                //
                 //    if (child_p != NULL) {
-//
+                //
                 //    }
                 //}
                 printf("===================\n");
@@ -144,14 +149,18 @@ void parcours(void) {
                 depth=3;
                 for (i = 0; i < WH_BOARD; i++)
                 {
-                    pos = CasePlusBasse(cur_node, i) ;
-                    child = getChildBoard(cur_node,pos,joueur); //fait le move dans la ieme colonne
-                    if(child!=NULL) {
-                        childscore = minimax(child, depth - 1, 1);
-                        //printf("%d - score  : %d\n", i, childscore);
-                        if (childscore > value) {
-                            best_child = child;
-                            value = childscore;
+                    pos = CasePlusBasse(cur_node, i);
+                    if (pos != -1) {
+                        printf("case plus basse colone %d : %d\n", i, pos);
+                        child = getChildBoard(cur_node, pos, joueur); //fait le move dans la ieme colonne
+                        if (child != NULL) {
+                            childscore = minimax(child, depth - 1, 1);
+                            printf("childscore col %d : %d\n", i, childscore);
+                            if (childscore > value) {
+                                best_child = child;
+                                value = childscore;
+                            }
+                            //printf("==%d== score  : %d\n", i, childscore);
                         }
                     }
                 }
