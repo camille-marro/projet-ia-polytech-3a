@@ -1,7 +1,7 @@
 #include <stdio.h>
 //#include <malloc.h>
 #include <assert.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <math.h>
 #include "board.h"
 
@@ -211,7 +211,10 @@ int CasePlusBasse(Item* node, int j) //Renvoie la case libre la plus basse de la
 Item *getChildBoard( Item *node, int pos, int joueur)
 {
     Item *newNode ;
-
+    if (pos == -1) {
+        node->score = 0;
+        return node;
+    }
     if (isValidPosition(node, pos)) {
 
         /* allocate and init child node */
@@ -230,7 +233,7 @@ Item *getChildBoard( Item *node, int pos, int joueur)
         //node->nbrefils++;
         newNode->pos = pos ; //La Position qu'on a joué
 
-        //newNode->score = score(node, pos, joueur);
+        newNode->score = score(node, pos, joueur);
         //printf("Le score du noeud est %d\n",newNode->score);
     }
     return newNode;
@@ -247,12 +250,12 @@ void clrscr()
 //Item *Generateur_Coup(Item *node, int joueur)
 //{
 //    int i;
-//    
+//
 //    for ( i = 0; i < MAX_BOARD; i++)
 //    {
 //        getChildBoard(node, i, joueur);
 //    }
-//    return 
+//    return
 //}
 //
 
@@ -283,7 +286,6 @@ int score(Item *node, int dercoup, int joueur)
 {
     int ii = dercoup / WH_BOARD;
     int jj = dercoup % WH_BOARD;
-
 
     return (ConvertToScore(ligne(node->board, joueur, ii, jj)) + ConvertToScore(colonne(node->board, joueur, ii, jj))
             + ConvertToScore(diagonale(node->board, joueur, ii, jj)) + ConvertToScore(antidiagonale(node->board, joueur, ii, jj)));
